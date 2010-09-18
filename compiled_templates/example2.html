@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-language" content="en">
+<title><script language="php"> echo $this->title;</script></title>
+</head>
+<body>
+
+
+
+
+<div id="product_list">
+	<script language="php"> if ($this->products) foreach($this->products as $product    ):</script><div class="product">
+	
+	<h2><script language="php"> echo $product[title];</script></h2>
+	
+	<img src="<script language="php"> echo $product[img];</script>"><p><script language="php"> echo $product[description];</script></p>
+	
+	<span>Price: <strong><script language="php"> echo $product[price];</script></strong></span>
+	</div>
+<script language="php"> endforeach;</script>
+	
+	
+	</div>
+
+
+</body>
+</html>
