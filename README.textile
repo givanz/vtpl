@@ -1,0 +1,194 @@
+Psttt! is just a list of key = value pairs.
+On the left you need to specify the CSS selector and on the right the code that must be injected for the selector.
+The code to be injected can be one of the following
+
+h2. simple strings
+
+p(=syntax). 
+div#id > span.class a = "lorem ipsum"
+
+</pre>
+h2. php variables
+
+<pre class="syntax">
+div#id > span.class a = $variable
+
+</pre>
+h2. Php code for complex logic
+
+<pre class="syntax">
+div#id > span.class a = 
+
+</pre>
+h2. External html includes, "from"
+
+<pre class="syntax">
+/*
+from, a special command that copies html from other templates, useful to include up to date html code into all templates from the currently maintained template for the specified section
+*/
+div#top > div.header = from(homepage.html|div#top > div.header)
+/*
+Or you can skip the selector part, in this case the same selector is assumed.
+*/
+div#top > div.header = from(homepage.html)
+
+</pre>
+h2. List of modifiers
+h3. outerHTML
+
+<pre class="syntax">
+/*
+by default code is injected into the specified elements without replacing the elements (innerHTML) to replace the entire elements with the specified code use outerHTML modifier
+*/
+div#id > span.class a|outerHTML = "lorem ipsum"
+/*
+now the entire "": will be replaced with "lorem ipsum" text instead of the default behaviour of inserting the text like this "lorem ipsum":
+*/
+
+</pre>
+h3. before
+
+<pre class="syntax">
+/*
+Inserts the code before the elements
+*/
+div#id > span.class a|outerHTML = "lorem ipsum"
+/* this will result in "lorem ipsum"":"
+
+</pre>
+h3. after
+
+<pre class="syntax">
+/*
+Inserts the code after the elements
+*/
+div#id > span.class a|outerHTML = "lorem ipsum"
+/* this will result in """:lorem ipsum"
+
+</pre>
+h3. deleteAllButFirst
+
+<pre class="syntax">
+/* Deletes all elements for the specified selector except for the first elements, usually in mockups front end developers add multiple elements to better show the final page look, the programmer just needs one element to iterate and fill data*/
+div#id > span.class a|deleteAllButFirst
+/*
+this
+
+%
+"link 1":
+"link 2":
+"link 3":
+%
+ span.class a = $variable
+</pre>
+
+h2. Php code for complex logic
+
+<pre>
+div#id > span.class a =  <?php if ($var) echo ?some text?;?>
+</pre>
+
+h2. External html includes, "from"
+
+<pre>
+/*
+from, a special command that copies html from other templates, useful to include up to date html code into all templates from the currently maintained template for the specified section
+*/
+div#top > div.header = from(homepage.html|div#top > div.header)
+/*
+Or you can skip the selector part, in this case the same selector is assumed.
+*/
+div#top > div.header = from(homepage.html)
+</pre>
+
+h2. List of modifiers
+h3. outerHTML
+
+<pre>
+/*
+by default code is injected into the specified elements without replacing the elements (innerHTML) to replace the entire elements with the specified code use outerHTML modifier
+*/
+div#id > span.class a|outerHTML = "lorem ipsum"
+/*
+now the entire "": will be replaced with "lorem ipsum" text instead of the default behaviour of inserting the text like this "lorem ipsum":
+*/
+</pre>
+
+h3. before
+
+<pre>
+/*
+Inserts the code before the elements
+*/
+div#id > span.class a|outerHTML = "lorem ipsum"
+/* this will result in "lorem ipsum"":"
+
+</pre>
+h3. after
+
+<pre>
+/*
+Inserts the code after the elements
+*/
+div#id > span.class a|outerHTML = "lorem ipsum"
+/* this will result in """:lorem ipsum"
+</pre>
+
+h3. deleteAllButFirst
+
+<pre>
+/* Deletes all elements for the specified selector except for the first elements, usually in mockups front end developers add multiple elements to better show the final page look, the programmer just needs one element to iterate and fill data*/
+div#id > span.class a|deleteAllButFirst
+/*
+**this**
+<div id=?id?>
+<span class=?class?>
+<a>link 1</a>
+<a>link 2</a>
+<a>link 3</a>
+</span>
+</div
+**wil result into this**
+<div id=?id?>
+<span class=?class?>
+<a>link 1</a>
+</span>
+</div>
+*/
+</pre>
+
+h3. hide
+
+<pre>
+/*removes the specified elements if the variable is false*/
+div.articles|if_exists = $articles
+</pre>
+
+h3. delete
+
+<pre>
+/* removes the specified elements*/
+div.articles|delete
+</pre>
+
+h3. outerHTML
+
+<pre>
+attributes
+/*
+to inject code into a tag's attribute you must specify the attribute as an modifier
+*/
+div#id > span.class a|href = "www.thewebsite.com"
+</pre>
+
+h2. additional commands
+h3. import
+
+<pre>
+import(profile/activity_tab.pst)
+</pre>
+
+
+includes additional files, usefull to separate logic when things get bigger and harder to maintain in one file
+
+h2. Comments
