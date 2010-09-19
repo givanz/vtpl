@@ -234,4 +234,4 @@ Psttt! is very simple but very powerfull, new features will be added when new te
 It's used in production in my projects and it evolves by real world needs.
 If you have any suggestions, critics or feedback don't keep it for yourself it may help make Psttt! better.
 
-"full documentation:http://codeassembly.com/Psttt!-full-documentation/
+"full documentation":http://codeassembly.com/Psttt!-full-documentation/
