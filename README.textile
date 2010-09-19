@@ -3,7 +3,7 @@ Psttt! is kind of a template engine but it does not alter original html files it
 With Psttt! when the developer changes the layout you don't have to change anything you already wrote, the logic for the html file that will be automatically be injected in his new html files.
 That's the power of keeping things clean and separated, no more html + logic hard to maintain bloat, that just doesn't cut it in an continuous changing living and breathing website.
 
-full article http://codeassembly.com/Psttt!-I-am-a-different-php-templating-system/
+"full article":http://codeassembly.com/Psttt!-I-am-a-different-php-templating-system/
 
 h1. Documentation
 
@@ -234,4 +234,4 @@ Psttt! is very simple but very powerfull, new features will be added when new te
 It's used in production in my projects and it evolves by real world needs.
 If you have any suggestions, critics or feedback don't keep it for yourself it may help make Psttt! better.
 
-full documentation http://codeassembly.com/Psttt!-full-documentation/
+"full documentation:http://codeassembly.com/Psttt!-full-documentation/
