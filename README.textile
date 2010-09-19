@@ -1,233 +1,11 @@
 Psttt! is kind of a template engine but it does not alter original html files it just uses original mockups from the initial development stage, allowing continuous mockup development and leaving front end developers and programmers living in peace by excluding the possibility to step on each others toes.
 
-How to achieve this?
-1 The solution is simple, keep template logic out of the html files, they don't belong there.
- Psttt! uses separate files to keep template logic
-2 Make it extremly easy to inject logic into the html.
- Psttt! uses css selectors to determine where to inject pieces of template logic.
-Enough talking, let me show you some snippets to get a better view.
-The simplest and dumbest example:
-**html mockup**
-
-
-h1. Write our company name here
-</pre>
-
-**php code**
-
-<pre>
-$view->title = 'Foo company';
-</pre>
-
-**psttt! code**
-
-<pre>
-h1#title = $title;
-</pre>
-
-**resulting php code**
-
-<pre>
-h1. 
-</pre>
-
-
-Not convincing enough isn't it? just showing you the separate layers, let's move on to some more realistic examples like a shoping cart product list page, a very common pattern.
-
-**html mockup**
-
-
-
-    
-h2. Mockup product 1
-!!
-Some product description goes here!
-%Price: *99999*%
-
-    
-h2. Mockup product2
-!!
-Some product description goes here!
-%Price: *888.99*%
-
-
-</pre>
-
-**php code**
-
-p(=syntax). 
-$view->products = array(
-    1 => array('title'=> 'Product 1', 'img' => '/img/products/1.jpg' , 'description' => 'the best product ever', price => '$10'),
-    2 => array('title'=> 'Product 2', 'img' => '/img/products/2.jpg' , 'description' => 'the second best product ever', price => '$30')
-);
-</pre>
-
-**psttt! code**
-
-<pre>
-//we just need one product to fill in data and iterate
-#product_list>.product|deleteAllButFirst
-//add iteration code, php foreach that will fill in data
-#product_list>.product|before = 
-    #product_list > .product> h2 = $product[title]
-    #product_list >  .product > img|src = $product[img]
-    #product_list > .product > p = $product[description]
-#product_list > .product > .span > strong = $product[price]
-#product_list>.product|after = 
-</pre>
-
-**resulting php code**
-
-<pre>
-
-    Welcome *Demo user 1*
-
-
-
-    
-h2. 
-!!"/>
-
-%Price: **%
-
-
-
-</pre>
-
-
-Maybe you are not convinced and you say to yourself that you can add that php code directly into the html or add some smarty or other template engine syntax and that this is not such a big deal.
-And that is an overhead to maintain a different file and keep these things separate.
-
-
-If so then think what happens when the front end developer changes the layout even if a little bit after you wrote your templates and added lots of divs in all over the places and you have to follow all your template includes and change all that, I know, it sucks and it's very time consuming.
-
-
 With Psttt! when the developer changes the layout you don't have to change anything you already wrote, the logic for the html file that will be automatically be injected in his new html files.
 That's the power of keeping things clean and separated, no more html + logic hard to maintain bloat, that just doesn't cut it in an continuous changing living and breathing website.
 
-
-"Psttt! full documentation":http://codeassembly.com/Psttt!-full-documentation/, full source code with examples can be found on "github":http://github.com/givanz/psttt	
-Psttt! I am a different php templating system
-
-Psttt! is kind of a template engine but it does not alter original html files it just uses original mockups from the initial development stage, allowing continuous mockup development and leaving front end developers and programmers living in peace by excluding the possibility to step on each others toes.
-
-
-How to achieve this?
-
-Keep template logic out of the html files, they don't belong there.
- Psttt! uses separate files to keep template logic
-
-
-Make it extremly easy to inject logic into the html.
- Psttt! uses css selectors to determine where to inject pieces of template logic.
-
-
-
-Enough talking, let me show you some snippets to get a better view.
-The simplest and dumbest example:
-**html mockup**
-
-
-<h1 id='title'>Write our company name here</h1>
-</pre>
-
-**php code**
-
-<pre>
-$view->title = 'Foo company';
-</pre>
-
-**psttt! code**
-
-<pre>
-h1#title = $title;
-</pre>
-
-**resulting php code**
-
-<pre>
-<h1 id=?title?><?php echo $this->title;?></h1>
-</pre>
-
-
-Not convincing enough isn't it? just showing you the separate layers, let's move on to some more realistic examples like a shoping cart product list page, a very common pattern.
-
-**html mockup**
-
-
-<div id='product_list'>
-    <div class='product'>
-<h2>Mockup product 1</h2>
-<img src='/images/default_product1.jpg'/>
-<p>Some product description goes here!</p>
-<span>Price: <strong>99999</strong></span>
-</div>
-    <div class='product'>
-<h2>Mockup product2</h2>
-<img src='/images/default_product2.jpg'/>
-<p>Some product description goes here!</p>
-<span>Price: <strong>888.99</strong></span>
-</div>
-</div>
-</pre>
-
-**php code**
-
-<pre class="syntax">
-$view->products = array(
-    1 => array('title'=> 'Product 1', 'img' => '/img/products/1.jpg' , 'description' => 'the best product ever', 'price' => '$10'),
-    2 => array('title'=> 'Product 2', 'img' => '/img/products/2.jpg' , 'description' => 'the second best product ever', 'price' => '$30')
-);
-</pre>
-
-**psttt! code**
-
-<pre>
-//we just need one product to fill in data and iterate
-#product_list>.product|deleteAllButFirst
-//add iteration code, php foreach that will fill in data
-#product_list>.product|before = <?php if ($this->products) foreach($this->products as $product    ):?>
-    #product_list > .product> h2 = $product[title]
-    #product_list >  .product > img|src = $product[img]
-    #product_list > .product > p = $product[description]
-#product_list > .product > .span > strong = $product[price]
-#product_list>.product|after = <?php endforeach;?>
-</pre>
-
-**resulting php code**
-
-<pre class="syntax">
-<div class=?user_box?>
-    Welcome <strong class=?username?>Demo user 1</strong>
-</div>
-<div id=?product_list?>
-<?php if ($this->products) foreach($this->products as $product):?>
-    <div class=?product?>
-<h2><?php echo  $product[title];?></h2>
-<img src=?<?php echo  $product[img];?>?/>
-<p><?php echo  $product[description];?></p>
-<span>Price: <strong><?php echo  $product[price];?></strong></span>
-</div>
-<?php endforeach;?>
-</div>
-</pre>
-
-
-Maybe you are not convinced and you say to yourself that you can add that php code directly into the html or add some smarty or other template engine syntax and that this is not such a big deal.
-And that is an overhead to maintain a different file and keep these things separate.
-
-
-If so, then think what happens when the front end developer changes the layout even if a little bit after you wrote your templates and he added lots of divs in all over the places and you have to follow all your template includes and change all that, I know, it sucks and it's very time consuming.
-
-
-With Psttt! when the developer changes the layout you don't have to change anything you already wrote, the logic for the html file that will be automatically be injected in his new html files.
-That's the power of keeping things clean and separated, no more html + logic hard to maintain bloat, that just doesn't cut it in an continuous changing living and breathing website.
-
-
-
+full article http://codeassembly.com/Psttt!-I-am-a-different-php-templating-system/
 
 h1. Documentation
-
 
 Psttt! is just a list of key = value pairs.
 On the left you need to specify the CSS selector and on the right the code that must be injected for the selector.
@@ -423,3 +201,37 @@ import(profile/activity_tab.pst)
 includes additional files, usefull to separate logic when things get bigger and harder to maintain in one file
 
 h2. Comments
+
+Psttt! can have comments
+//single line
+/* Or multiple line
+comments
+*/
+</pre>
+
+h2. Debugging
+
+<pre>
+/*
+just on some portions with the following directive directly into the Psttt! files
+/*
+you can turn on debug with
+*/
+debug = true
+/*
+or turn it off with
+*/
+debug = false
+</pre>
+
+
+Or by setting the class property debug to true;
+When in debug mode, you will have a list of all template injections made on the html to visualize.
+
+
+Psttt! is very simple but very powerfull, new features will be added when new templating problems will show that can't be solved with the current ones.
+
+It's used in production in my projects and it evolves by real world needs.
+If you have any suggestions, critics or feedback don't keep it for yourself it may help make Psttt! better.
+
+full documentation http://codeassembly.com/Psttt!-full-documentation/
