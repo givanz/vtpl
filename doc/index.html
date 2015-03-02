@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta http-equiv="content-language" content="en">
+		<title>Psttt! full documentation</title>
+		<link href="style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div id="postbody">
+			<h1>Psttt! full documentation</h1>
+			<span>2010-09-18</span>
+			<p class="desc">A list with all Psttt! features</p>
+			<p>Psttt! is just a list of key = value pairs.  On the left you need to specify the CSS selector and on the right the code that must be injected for the selector.  The code to be injected can be one of the following</p>
+			<h2>simple strings</h2>
+			<div class="code">
+				<pre>div#id &gt; span.class a = “lorem ipsum”</pre>
+			</div>
+			<h2>php variables</h2>
+			<div class="code">
+				<pre>div#id &gt; span.class a = $variable</pre>
+			</div>
+			<h2>Php code for complex logic</h2>
+			<div class="code">
+				<pre>div#id &gt; span.class a =  &lt;?php if ($var) echo ?some text?;?&gt;</pre>
+			</div>
+			<h2>External html includes, "from"</h2>
+			<div class="code">
+				<pre>/*
+from, a special command that copies html from other templates, useful to include up to date html code into all templates from the currently maintained template for the specified section
+*/
+div#top &gt; div.header = from(homepage.html|div#top &gt; div.header)
+/*
+Or you can skip the selector part, in this case the same selector is assumed.
+*/
+div#top &gt; div.header = from(homepage.html)</pre>
+			</div>
+			<h2>List of modifiers</h2>
+			<h3>outerHTML</h3>
+			<div class="code">
+				<pre>/*
+by default code is injected into the specified elements without replacing the elements (innerHTML) to replace the entire elements with the specified code use outerHTML modifier
+*/
+div#id &gt; span.class a|outerHTML = “lorem ipsum”
+/*
+now the entire <a></a> will be replaced with “lorem ipsum” text instead of the default behaviour of inserting the text like this <a>lorem ipsum</a>
+*/</pre>
+			</div>
+			<h3>before</h3>
+			<div class="code">
+				<pre>/*
+Inserts the code before the elements
+*/
+div#id &gt; span.class a|outerHTML = “lorem ipsum”
+/* this will result in “lorem ipsum<a></a>”</pre>
+			</div>
+			<h3>after</h3>
+			<div class="code">
+				<pre>/*
+Inserts the code after the elements
+*/
+div#id &gt; span.class a|outerHTML = “lorem ipsum”
+/* this will result in “<a></a>lorem ipsum”</pre>
+			</div>
+			<h3>deleteAllButFirst</h3>
+			<div class="code">
+				<pre>/* Deletes all elements for the specified selector except for the first elements, usually in mockups front end developers add multiple elements to better show the final page look, the programmer just needs one element to iterate and fill data*/
+div#id &gt; span.class a|deleteAllButFirst
+/*
+<b>this</b>
+&lt;div id=?id?&gt;
+&lt;span class=?class?&gt;
+
+&lt;a&gt;link 1&lt;/a&gt;
+
+&lt;a&gt;link 2&lt;/a&gt;
+
+&lt;a&gt;link 3&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div
+<b>wil result into this</b>
+&lt;div id=?id?&gt;
+&lt;span class=?class?&gt;
+
+&lt;a&gt;link 1&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+
+*/</pre>
+			</div>
+			<h3>hide</h3>
+			<div class="code">
+				<pre>/*removes the specified elements if the variable is false*/
+div.articles|if_exists = $articles</pre>
+			</div>
+			<h3>delete</h3>
+			<div class="code">
+				<pre>/* removes the specified elements*/
+div.articles|delete</pre>
+			</div>
+			<h3>outerHTML</h3>
+			<div class="code">
+				<pre>attributes
+/*
+to inject code into a tag’s attribute you must specify the attribute as an modifier
+*/
+div#id &gt; span.class a|href = “www.thewebsite.com”</pre>
+			</div>
+			<h2>additional commands</h2>
+			<h3>import</h3>
+			<div class="code">
+				<pre>import(profile/activity_tab.pst)</pre>
+			</div>
+			<p>includes additional files, usefull to separate logic when things get bigger and harder to maintain in one file</p>
+			<h2>Comments</h2><h3>outerHTML</h3>
+			<div class="code">
+				<pre>Psttt! can have comments
+//single line
+/* Or multiple line
+comments
+*/</pre>
+			</div>
+			<h2>Debugging</h2>
+			<div class="code">
+				<pre>/*
+just on some portions with the following directive directly into the Psttt! files
+/*
+you can turn on debug with
+*/
+debug = true
+/*
+or turn it off with
+*/
+debug = false</pre>
+			</div>
+			<p>Or by setting the class property debug to true;  When in debug mode, you will have a list of all template injections made on the html to visualize.</p>
+			<p>Psttt! is very simple but very powerfull, new features will be added when new templating problems will show that can’t be solved with the current ones.</p>
+			<p>It’s used in production in my projects and it evolves by real world needs.  If you have any suggestions, critics or feedback don’t keep it for yourself it may help make Psttt! better.</p>
+			<p>Full source code with examples can be found on <a href="http://github.com/givanz/psttt">github</a></p>
+		</div>
+	</body>
+</html>

@@ -19,7 +19,7 @@
 *    along with this program.  If not, see http://www.gnu.org/licenses/
 */
 
-//define('PSTTT_DEBUG', true); uncomment to always enable debugging 
+define('PSTTT_DEBUG', false); #Change to true to enable debugging. (liquibyte) 
 
 define('PSTTT_TYPE_LOAD',1);
 define('PSTTT_TYPE_SAVE',2);
@@ -42,6 +42,8 @@ class Psttt
 	var $extension = 'pst';
 	var $debug = false;
 	var $debug_log;
+	//var debug_html; added by liquibyte to instantiate a property being called but not defined.
+	var $debug_html;
 	var $_modifiers = array('outerHTML','before','after','deleteAllButFirst','delete','if_exists','hide');
 
 	function debug_type_to_string($type)
@@ -51,7 +53,7 @@ class Psttt
 
 	function Psttt()
 	{
-		if (PSTTT_DEBUG)
+		if ('PSTTT_DEBUG')
 		{
 			$this->debug = true;
 		}
@@ -197,7 +199,7 @@ class Psttt
 		}
 
 
-		if ($placeholders_php)
+		if (isset($placeholders_php))
 		{
 			$this->template = preg_replace($patterns_php, $placeholders_php, $this->template);
 		}
@@ -433,19 +435,19 @@ class Psttt
 		}
 	}
 
-	function remove_children(&$node)
+	function remove_children($node)
 	{
 		while ($node->firstChild)
 		{
 			while ($node->firstChild->firstChild)
 			{
-				$this->remove_children(&$node->firstChild);
+				$this->remove_children($node->firstChild);
 			}
 			$node->removeChild($node->firstChild);
 		}
 	}
 
-	function innerHTML(&$node_list, $html = false)
+	function innerHTML($node_list, $html = false)
 	{
 		foreach ($node_list as $node)
 		{
@@ -461,7 +463,7 @@ class Psttt
 			} else
 			{
 
-				$this->remove_children(&$node);
+				$this->remove_children($node);
 				if($html == '') continue;
 
 				$f = $this->document->createDocumentFragment();
@@ -472,7 +474,7 @@ class Psttt
 
 	}
 
-	function if_exists(&$node_list, $variable = false)
+	function if_exists($node_list, $variable = false)
 	{
 		foreach ($node_list as $node)
 		{
@@ -493,7 +495,7 @@ class Psttt
 		}
 	}
 	
-	function hide(&$node_list, $variable = false)
+	function hide($node_list, $variable = false)
 	{
 		foreach ($node_list as $node)
 		{
@@ -515,7 +517,7 @@ class Psttt
 	}
 	
 	
-	function insertBefore(&$node_list, $html = false)
+	function insertBefore($node_list, $html = false)
 	{
 		foreach ($node_list as $node)
 		{
@@ -529,7 +531,7 @@ class Psttt
 	}
 
 
-	function insertAfter(&$node_list, $html = false)
+	function insertAfter($node_list, $html = false)
 	{
 		foreach ($node_list as $node)
 		{
@@ -542,30 +544,30 @@ class Psttt
 		}
 	}
 	
-	function deleteAllButFirst(&$node_list, $html = false)
+	function deleteAllButFirst($node_list, $html = false)
 	{
 		$first = true;
 		foreach ($node_list as $node)
 		{
 			if (!$first)
 			{ 
-				$this->remove_children(&$node);
+				$this->remove_children($node);
 				$node->parentNode->removeChild($node);
 			}
 			$first = false;
 		}
 	}
 	
-	function delete(&$node_list, $html = false)
+	function delete($node_list, $html = false)
 	{
 		foreach ($node_list as $node)
 		{
-				$this->remove_children(&$node);
+				$this->remove_children($node);
 				$node->parentNode->removeChild($node);
 		}
 	}
 	
-	function setAttribute(&$node_list, $attribute, $val)
+	function setAttribute($node_list, $attribute, $val)
 	{
 		foreach ($node_list as $node)
 		{
@@ -676,7 +678,7 @@ html
 }
 </style>
 <div class="psttt_console_log">
-<a href="http://www.codeassembly.com/Psttt!-full-documentation/">Psttt!</a>
+<a href="..//pst/doc/index.html">Psttt!</a>
 <a href="#" onclick="psttt_hide()">Toggle</a>
 <a href="#" onclick="psttt_close()">Close</a>
 <div class="psttt_console_log_content">
