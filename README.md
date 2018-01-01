@@ -1,11 +1,13 @@
-Psttt! is template engine with the goal to keep html untouched so you don't end up with a mess dealing with html interwinded with php or other template language logic, keeping things clean and separate increases maintainability.
+# Psttt! is a different php template engine 
+
+That uses css selector to inject php code into html with the goal to keep html untouched so you don't end up with a mess dealing with html interwinded with php or other template language logic, keeping things clean and separate increases maintainability.
 
 To achieve this psttt uses a list of code to inject into html, to specify the elements where to inject the code css selectors are used.
 
 With Psttt! when the frontend code/designer changes the html you don’t have to change anything you already wrote, the logic for the html file that will be automatically be injected in his new html files.  
 
 
-#Documentation
+## Documentation
 
 Psttt! is just a list of *key = value* pairs.  
  On the left you need to specify the CSS selector and on the right the code that must be injected for the selector.  
@@ -32,7 +34,7 @@ div#id > span.class a = <?php if ($var) echo $var;?>
 ```
 
 
-###External html includes, “from”
+### External html includes, “from”
 
 ```css
 /*
@@ -80,7 +82,7 @@ div#id > span.class a|outerHTML = "lorem ipsum"
 ```
 
 
-###deleteAllButFirst
+### deleteAllButFirst
 
 ```css
 /* Deletes all elements for the specified selector except for the first elements, usually in mockups front end developers add multiple elements to better show the final page look, the programmer just needs one element to iterate and fill data*/
@@ -144,7 +146,7 @@ import(profile/activity_tab.pst)
 ```
 
 
-##Comments
+## Comments
 
 Psttt! can have comments  
 
@@ -155,7 +157,7 @@ Psttt! can have comments
  */  
 ```
 
-##Debugging
+## Debugging
 
 ```css
 /*
