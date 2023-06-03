@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <meta http-equiv="content-language" content="en" />
+  <title>Title</title>
+</head>
+<body>
+
+</head>
+<body>
+	
+	<div data-products>
+		
+		<div data-product>
+		
+			<div data-v-class-if-premium="product.price > 30">
+			
+				<h2 data-product-title>Mockup product 1</h2>
+				
+				<img src="/images/default_product1.jpg" data-product-img/>
+				
+				<p data-product-description>Some product description goes here!</p>
+				
+				<span>Price: <strong>$<span data-product-price>999</span></strong>
+				
+				<span data-v-if="product.price > 20">Free shipping for this product</span>
+			
+			</div>
+		</div>
+		
+		<div data-product>
+		
+			<div data-v-class-if-premium="product.price > 30">
+			
+				<h2 data-product-title>Mockup product 2</h2>
+				
+				<img src="/images/default_product2.jpg" data-product-img/>
+				
+				<p data-product-description>Some product description goes here!</p>
+				
+				<span>Price: <strong>$<span data-product-price>111</span></strong>
+				
+				<span data-v-if="product.price > 20">Free shipping for this product</span>
+			
+			</div>
+		</div>
+	</div>
+
+<style>
+[data-products] {
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+/* class added only for products with price > 30 */
+.premium {
+	background:tomato;
+}	
+</style>
+	
+</body>
+</html>

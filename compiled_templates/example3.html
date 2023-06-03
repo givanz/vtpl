@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-language" content="en">
+  <title><?php if (isset($this->title)) echo htmlentities($this->title); ?></title>
+</head>
+<body>
+
+
+
+	
+	<div data-products>
+		
+		<?php  if ($this->products) foreach($this->products as $product): ?><div data-product>
+		
+			<div data-v-class-if-premium="product.price &gt; 30" class=" <?php  $condition = ( (isset($product['price']) && ($product['price'] > 30)) ); if (($condition) || (isset($vvveb_is_page_edit) && $vvveb_is_page_edit)) { echo 'premium'; } ?>">
+			
+				<h2 data-product-title><?php if (isset($product['title'])) echo htmlentities($product['title']); ?></h2>
+				
+				<img src="<?php if (isset($product['img'])) echo htmlentities($product['img']); ?>" data-product-img>
+				
+				<p data-product-description><?php if (isset($product['description'])) echo htmlentities($product['description']); ?></p>
+				
+				<span><?php  echo _('Price:'); ?> <strong>$<span data-product-price><?php if (isset($product['price'])) echo htmlentities($product['price']); ?></span></strong>
+				
+				<?php  $condition = ( (isset($product['price']) && ($product['price'] > 20)) ); if (@($condition) || (isset($vvveb_is_page_edit) && $vvveb_is_page_edit)) {  ?><span data-v-if="product.price &gt; 20"><?php  echo _('Free shipping for this product'); ?></span><?php  }  ?>
+			
+			</span></div>
+		</div><?php  endforeach; ?>
+		
+		
+	</div>
+
+<style>
+[data-products] {
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+/* class added only for products with price > 30 */
+.premium {
+	background:tomato;
+}	
+</style>
+	
+
+</body></html>
