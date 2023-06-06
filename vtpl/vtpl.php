@@ -34,13 +34,6 @@ define('DS', DIRECTORY_SEPARATOR);
 include 'macros.php';
 include 'debug.php';
 
-function stripExtraSpaces($string) {
-	foreach (['\t', '\n', '\r', ' '] as $space) {
-		$string = preg_replace('/(' . $space . ')' . $space . '+/', '\1', $string);
-	}
-
-	return $string;
-}
 
 #[\AllowDynamicProperties]
 class Vtpl {
@@ -69,9 +62,9 @@ class Vtpl {
 	private $variableFilters =
 	[
 		'capitalize'       => 'ucfirst($$0)',
-		'friendly_date'    => 'Vvveb\friendlyDate($$0)',
+		'friendly_date'    => 'friendlyDate($$0)',
 		'truncate'         => 'substr($$0, 0, $$1)',
-		'truncate_words'   => 'Vvveb\truncateWords($$0,$$1)',
+		'truncate_words'   => 'truncateWords($$0,$$1)',
 		'replace'          => 'str_replace($$1, $$2, $$0)',
 		'uppercase'        => 'strtoupper($$0)',
 		'lowercase'        => 'strtolower($$0)',
@@ -829,7 +822,7 @@ class Vtpl {
 
 					   	return $value;
 
-					   	return \Vvveb\System\filter('@[#\@&=?\0-9a-zA-Z_: ;-]+@',$value, 500);
+					   	return filter('@[#\@&=?\0-9a-zA-Z_: ;-]+@',$value, 500);
 					   }, $value);
 
 		//run regex on attribute name @@__data-v-product-*:data-v-product-(*)__@@
@@ -845,7 +838,7 @@ class Vtpl {
 
 					   	foreach ($node->attributes as $name => $attrNode) {
 					   		if (preg_match('@' . $regex . '@', $value, $_match)) {
-					   			//$value = \Vvveb\System\filter('@[0-9a-zA-Z_\-\.\#\/]+@', $_match[1], 500);
+					   			//$value = filter('@[0-9a-zA-Z_\-\.\#\/]+@', $_match[1], 500);
 					   			$value = $_match[1];
 					   			$this->debug->log('VTPL_ATTRIBUTE', '<b>MATCH </b>' . $_match[1]);
 					   		} else {
@@ -866,7 +859,7 @@ class Vtpl {
 
 				   	foreach ($node->attributes as $name => $attrNode) {
 				   		if (preg_match("@$regex@", $name, $_match)) {
-				   			//$value = \Vvveb\System\filter('@[0-9a-zA-Z_\-\.\#\/]+@', $_match[1], 500);
+				   			//$value = filter('@[0-9a-zA-Z_\-\.\#\/]+@', $_match[1], 500);
 				   			$value = $_match[1] ?? null;
 				   			$this->debug->log('VTPL_ATTRIBUTE', '<b>MATCH </b>' . $value);
 				   		} else {
@@ -876,7 +869,7 @@ class Vtpl {
 
 				   	return $value;
 
-				   	return \Vvveb\System\filter('@[#\@&=?\0-9a-zA-Z_: ;-]+@',$value, 500);
+				   	return filter('@[#\@&=?\0-9a-zA-Z_: ;-]+@',$value, 500);
 				   }, $value);
 
 		//filters
@@ -1031,7 +1024,7 @@ class Vtpl {
 		}
 		$value = preg_replace_callback('/@@([\.a-zA-Z_-]+)@@/m',
 					   function ($matches) use ($node, $json) {
-					   	return $attrib = var_export(\Vvveb\System\arrayPath($json, $matches[1]), true);
+					   	return $attrib = var_export(arrayPath($json, $matches[1]), true);
 					   	$this->debug->log('VTPL_ATTRIBUTE', '<b>JSON NAME</b> ' . $attrib);
 					   	$this->debug->log('VTPL_ATTRIBUTE', '<b>REGEX </b> ' . $regex);
 					   	$value = $node->getAttribute($attrib);
@@ -1566,7 +1559,7 @@ class Vtpl {
 		$this->debug->log('SELECTOR_FROM', $filename);
 
 		if (! ($html = @file_get_contents($filename))) {
-			Vvveb\log_error("can't load html $filename");
+			error_log("can't load html $filename");
 			$this->debug->log('LOAD', '<b>EXTERNAL ERROR</b> ' . $filename . ' ' . $selector);
 
 			return false;
@@ -1605,7 +1598,7 @@ class Vtpl {
 		}
 
 		if (! ($html = @file_get_contents($filename))) {
-			Vvveb\log_error("can't load template $filename");
+			error_log("can't load template $filename");
 			$this->debug->log('LOAD', '<b>ERROR</b> ' . $filename);
 
 			return false;
@@ -1718,7 +1711,7 @@ class Vtpl {
 						if (strpos($value, 'this') === 0) {
 							$value = str_replace('this.', 'this->', $value);
 						}
-						$value   = Vvveb\dotToArrayKey($value);
+						$value   = dotToArrayKey($value);
 
 						$php  = '<_script language="php"><![CDATA[ if (isset(' . $value . ')) echo ' . $value . ';]]></_script>';
 						$this->_setNodeAttribute($node, $name, $php);
@@ -1864,7 +1857,7 @@ class Vtpl {
 					  	if (isset($matches[2])) {
 					  		$modifier = $matches[2];
 					  	}
-					  	$variable = Vvveb\dotToArrayKey($matches[1]);
+					  	$variable = dotToArrayKey($matches[1]);
 					  	$template =
 						"<?php if (isset($variable)) {
                                 if (is_array($variable)) {
@@ -1935,7 +1928,7 @@ class Vtpl {
 		}
 
 		if (empty($html)) {
-			Vvveb\log_error("compiled template is empty for $compiledFile");
+			error_log("compiled template is empty for $compiledFile");
 
 			return false;
 		}
@@ -1946,10 +1939,7 @@ class Vtpl {
 			try {
 				token_get_all($html, TOKEN_PARSE);
 			} catch (\ParseError $e) {
-				//return \Vvveb\System\Core\exceptionHandler($e);
-				$data = \Vvveb\System\Core\exceptionToArray($e, $compiledFile);
-
-				return \Vvveb\System\Core\FrontController :: notFound(false, $data, 500);
+				die("Could not compile $compiledFile " . $e->getMessage());
 			}
 		} else {
 			file_put_contents($compiledFile, $html);

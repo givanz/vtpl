@@ -43,6 +43,54 @@ function dotToArrayKey($key) {
 	}, $key);
 }
 
+
+function stripExtraSpaces($string) {
+	foreach (['\t', '\n', '\r', ' '] as $space) {
+		$string = preg_replace('/(' . $space . ')' . $space . '+/', '\1', $string);
+	}
+
+	return $string;
+}
+
+/*
+ * Regex filter to allow only matched content
+ *
+ * @param string $regex 
+ * @param string $input 
+ * @param integer $maxInputSize [100] 
+ */
+function filter($regex, $input, $maxInputSize = 100) {
+	$matches = [];
+
+	if (preg_match($regex, substr($input, 0, $maxInputSize), $matches)) {
+		return $matches[0];
+	} else {
+		return false;
+	}
+}
+
+/*
+ * Get values from multidimensional arrays based on path
+ * For example for array ['item' => ['desc' => ['name' => 'test']]] the path "item.description.name" will return "test".
+ * 
+ * 
+*/
+
+function arrayPath(array $a, $path, $default = null, $token = '.') {
+	$p = strtok($path, $token);
+
+	while ($p !== false) {
+		if (! isset($a[$p])) {
+			return $default;
+		}
+
+		$a = $a[$p];
+		$p = strtok($token);
+	}
+
+	return $a;
+}
+
 /*
  If macro enables elements with data-v-if="condition = true" to be visible only if condition is true also data-v-if-not="condition = true"
 
