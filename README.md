@@ -15,7 +15,7 @@ Vtpl ensures proper separations of concerns, the frontend logic is separated fro
  
 Templates are just lists of css selectors and php code and variable names to insert.
  
-This makes it possible to build CMS's like [Vvveb](https://www.vvveb.com) where any html page of the CMS can be changed to the last element without affecting the rendering of dynamic content from the database.
+This makes it possible to build a CMS like [Vvveb](https://www.vvveb.com) where any html page of the CMS can be changed to the last element without affecting the rendering of dynamic content from the database.
  
  
 ## Documentation
@@ -23,6 +23,8 @@ This makes it possible to build CMS's like [Vvveb](https://www.vvveb.com) where 
 Vtpl templates are just a list of `key = value` pairs.   
  
 On the left you need to specify the CSS selector and on the right the code or variable that must be inserted for the selector.   
+ 
+`#css_selector = $php_variable`
  
 The code to be inserted can be one of the following
  
@@ -54,8 +56,8 @@ div#id > span.class a = <?php if (isset($var)) echo htmlentities($var);?>
 ```css
 /*
 from, a special command that copies html from other templates,
-useful to include up to date html code into all templates from the currently maintained template  
-for the specified section a common use is to apply the header from homepage to all other other html templates
+useful to include up to date html code into all templates from the currently maintained template for the specified section 
+a common use is to apply the header from homepage to all other other html templates
 */
  
 div#top > div.header = from(homepage.html|div#top > div.header)
@@ -151,6 +153,10 @@ div#id > span.class a|deleteAllButFirst
 */
 ```
  
+ 
+##### deleteAllButFirstChild
+
+The same as `deleteAllButFirst` but will keep the first element (child element) for each set, all parent elements will keep only one child element in contrast with `deleteAllButFirst` that works globally.
  
 #### hide
  
@@ -338,7 +344,80 @@ if ($condition) {
 ?>
 
 ```
+Some macros like if and if class are available by default
+
+### If macro
+
+`data-v-if="condition"`
+
+`data-v-if-not="condition"`
+
+To show/hide an element only if the condition is met
+
+```html
+<span data-v-if="product.price > 20">Free shipping for this product</span>
+```
+```html
+<span data-v-if="product.price > 20">Free shipping for this product</span>
+```
+
+### If class macro
+
+`data-v-class-if-class_name="condition"`
+
+`data-v-class-if-not-class_name="condition"`
+
+
+To add class `premium` to a div if price is higher than 30 
+
+```html
+<div data-v-class-if-premium="product.price > 30"></div>
+
+<div data-v-class-if-not-standard="this.product.price > 30"></div>
+```
+
+Will result in 
+
+```html
+<div class="premium"></div>
+```
+
  
+## Interpolation
+
+Sometimes you need to pass data to javascript for this cases you can use a simple `{$variable}` syntax
+
+```php
+<?php
+$this->date_created = 'Today';
+$this->my_object = ['date_created' => '10:00', 'date_modified' => '12:30'];
+?>
+```
+
+```html
+<body>
+<div></div>
+<script>
+let date_created = '{$this.date_created}';//the output will be text/string and needs quotes
+let my_object = {$this.my_object};//the php array will be converted to json object
+</script>
+</body>
+```
+
+## Attribute interpolation
+
+When you need to quickly insert some data in a node attribute at some position to avoid concatenating and embeding existing attribute text in the template.
+
+```php
+<?php
+$this->date_created = '12:30';
+?>
+```
+
+```html
+<a title="Created at {$this.date_created}">Date<a>
+```
+
 ## Debugging
  
 If a global `VTPL_DEBUG` constant is true then a console will show on the bottom of the page with all the insert operations made on the html.
